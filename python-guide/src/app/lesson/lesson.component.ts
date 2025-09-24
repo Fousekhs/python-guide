@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CapmaxProgressbarComponent } from '../capmax-progressbar/capmax-progressbar.component';
 import { LeftChevronComponent } from '../../assets/icons/chevron-left.component';
 import { RightChevronComponent } from '../../assets/icons/chevron-right.component';
 import { HomeIconComponent } from '../../assets/icons/home.component';
-import { LessonUnitComponent, LessonUnitType } from '../lesson-unit/lesson-unit.component';
+import { LessonUnitType } from '../lesson-unit/lesson-unit.component';
 import { Observable, switchMap, forkJoin, of, EMPTY } from 'rxjs';
-import { ContentService, Subject, SubjectContent } from '../../services/content.service';
+import { ContentService, SubjectContent } from '../../services/content.service';
 import { TheoryUnitComponent } from '../theory-unit/theory-unit.component';
 import { McqUnitComponent } from '../mcq-unit/mcq-unit.component';
 import { AttemptService } from '../../services/attempt.service';
@@ -21,7 +20,7 @@ export interface Lesson {
 
 @Component({
   selector: 'app-lesson',
-  imports: [MatProgressBarModule, TheoryUnitComponent, McqUnitComponent, HomeIconComponent, CapmaxProgressbarComponent, LeftChevronComponent, RightChevronComponent],
+  imports: [TheoryUnitComponent, McqUnitComponent, HomeIconComponent, CapmaxProgressbarComponent, LeftChevronComponent, RightChevronComponent],
   standalone: true,
   templateUrl: './lesson.component.html',
   styleUrl: './lesson.component.css'

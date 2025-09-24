@@ -1,10 +1,10 @@
 import { Component, HostBinding, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RightChevronComponent } from '../../assets/icons/chevron-right.component';
 
 @Component({
   selector: 'app-section',
-  imports: [CommonModule, RightChevronComponent],
+  imports: [RightChevronComponent],
   templateUrl: './section.component.html',
   styleUrls: ['./section.component.css']
 })

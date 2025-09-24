@@ -1,49 +1,51 @@
 <!-- <div ngIf*="type == 'theory'" class="lesson-content">
-    <h3>Lesson Content</h3>
-    <p>Python is a versatile programming language that is widely used in various fields.</p>
-    <p>It is known for its simplicity and readability, making it a great choice for beginners.</p>
-    <p>In this lesson, we will cover the following topics:</p>
-    <ul>
-        <li>Variables and Data Types</li>
-        <li>Control Structures</li>
-        <li>Functions</li>
-        <li>Modules and Packages</li>
-    </ul>
+<h3>Lesson Content</h3>
+<p>Python is a versatile programming language that is widely used in various fields.</p>
+<p>It is known for its simplicity and readability, making it a great choice for beginners.</p>
+<p>In this lesson, we will cover the following topics:</p>
+<ul>
+  <li>Variables and Data Types</li>
+  <li>Control Structures</li>
+  <li>Functions</li>
+  <li>Modules and Packages</li>
+</ul>
 </div> -->
 
 <!-- lesson-unit.component.html -->
-<div [ngSwitch]="type">
-
-  <!-- case 1: theory -->
-  <!--
+<div>
+  @switch (type) {
+    <!-- case 1: theory -->
+    <!--
     <div *ngSwitchCase="'theory'" class="lesson-content">
-        <app-theory-unit [title]="data['title']" [content]="data['content']" [imgSrc]="assets\test.jpeg"></app-theory-unit>
+      <app-theory-unit [title]="data['title']" [content]="data['content']" [imgSrc]="assets\test.jpeg"></app-theory-unit>
     </div>
-  -->
-  <!-- <ng-template *ngSwitchCase="'theory'">
+    -->
+    <!-- <ng-template *ngSwitchCase="'theory'">
     <app-theory-unit [data]="unitData"></app-theory-unit>
   </ng-template> -->
-
   <!-- case 2: true-false -->
   <!-- <ng-template *ngSwitchCase="'true-false'">
-    <app-true-false-unit></app-true-false-unit>
-  </ng-template> -->
-
-  <!-- case 3: multiple-choice  -->
-  <div *ngSwitchCase="'multiple-choice'">
+  <app-true-false-unit></app-true-false-unit>
+</ng-template> -->
+<!-- case 3: multiple-choice  -->
+@case ('multiple-choice') {
+  <div>
     <app-mcq-unit></app-mcq-unit>
   </div>
-
-  <!-- case 4: code -->
-  <div *ngSwitchCase="'code'">
+}
+<!-- case 4: code -->
+@case ('code') {
+  <div>
     <app-python-coder></app-python-coder>
   </div>
-
-  <!-- fallback for an unexpected type -->
-  <div *ngSwitchDefault>
+}
+<!-- fallback for an unexpected type -->
+@default {
+  <div>
     <p class="error">
       Unknown lesson type “{{ type }}”!
     </p>
-</div>
-
+  </div>
+}
+}
 </div>

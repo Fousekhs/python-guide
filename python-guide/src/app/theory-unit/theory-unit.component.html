@@ -1,14 +1,19 @@
 <div class="content-container">
   <h3 class="title">{{ title }}</h3>
-  <div *ngFor="let seg of content | codeParser">
-
-    <div *ngIf="seg.type === 'text'" class="question-text" [innerHTML] = "seg.value"></div>
-
-    <app-code-viewer
-      *ngIf="seg.type === 'code'"
-      [code]="seg.value">
-    </app-code-viewer>
-  </div>
-  <img [src]="imgSrc" alt="Theory Image" class="theory-image" *ngIf="imgSrc != '' && imgSrc != null">
+  @for (seg of content | codeParser; track seg) {
+    <div>
+      @if (seg.type === 'text') {
+        <div class="question-text" [innerHTML] = "seg.value"></div>
+      }
+      @if (seg.type === 'code') {
+        <app-code-viewer
+          [code]="seg.value">
+        </app-code-viewer>
+      }
+    </div>
+  }
+  @if (imgSrc != '' && imgSrc != null) {
+    <img [src]="imgSrc" alt="Theory Image" class="theory-image">
+  }
   <button class="next-btn" (click)="goToNext()">Next</button>
 </div>

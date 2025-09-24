@@ -11,12 +11,14 @@
 
         <div style="flex-grow: 1;"></div>
 
-        <button *ngIf="isAuthenticated" class="login-button" (click)="logout()">
-          <div class="login-label">
-            Logout
-          </div>
-          <svg-log-out />
-        </button>
+        @if (isAuthenticated) {
+          <button class="login-button" (click)="logout()">
+            <div class="login-label">
+              Logout
+            </div>
+            <svg-log-out />
+          </button>
+        }
       } @else {
         <div style="flex-grow: 1;"></div>
         <button class="login-button" (click)="login()">
@@ -38,7 +40,7 @@
     <app-section-container>
       @let sections = (sections$ | async);
       @if (sections?.length) {
-        <ng-container *ngFor="let section of sections">
+        @for (section of sections; track section) {
           <app-section [title]="section.title">
             <div class="section-content">
               @let subjects = section.subjects;
@@ -56,37 +58,37 @@
               }
             </div>
           </app-section>
-        </ng-container>
+        }
       } @else {
         <p>Loading content...</p>
       }
       <!-- <app-section [title]="'Section 1'">
-        <div class="section-content">
-          <app-subject-card
-            title="Physics"
-            status="passed"
-            [available]="true"
-            [destination]="['/lesson', '1']"
-          ></app-subject-card>
+      <div class="section-content">
+        <app-subject-card
+          title="Physics"
+          status="passed"
+          [available]="true"
+          [destination]="['/lesson', '1']"
+        ></app-subject-card>
 
-          <app-subject-card
-            title="Chemistry"
-            status="failed"
-            [available]="true"
-          ></app-subject-card>
+        <app-subject-card
+          title="Chemistry"
+          status="failed"
+          [available]="true"
+        ></app-subject-card>
 
-          <app-subject-card title="Mathematics" status="first"></app-subject-card>
-          <app-subject-card title="Mathematics" status="first"></app-subject-card>
-          <app-subject-card title="Mathematics" status="first"></app-subject-card>
-        </div>
-      </app-section>
+        <app-subject-card title="Mathematics" status="first"></app-subject-card>
+        <app-subject-card title="Mathematics" status="first"></app-subject-card>
+        <app-subject-card title="Mathematics" status="first"></app-subject-card>
+      </div>
+    </app-section>
 
-      <app-section [title]="'Section 2'">
-        <p>Section 2</p>
-      </app-section>
-      <app-section [title]="'Section 3'">
-        <p>Section 3</p>
-      </app-section> -->
-    </app-section-container>
-  </div>
+    <app-section [title]="'Section 2'">
+      <p>Section 2</p>
+    </app-section>
+    <app-section [title]="'Section 3'">
+      <p>Section 3</p>
+    </app-section> -->
+  </app-section-container>
+</div>
 </div>

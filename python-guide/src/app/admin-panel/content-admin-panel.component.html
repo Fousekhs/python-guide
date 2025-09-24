@@ -5,28 +5,28 @@
 
   <!-- Custom Tab Navigation -->
   <nav class="tab-navigation">
-    <button 
-      class="tab-button" 
+    <button
+      class="tab-button"
       [class.active]="activeTab === 'sections'"
       (click)="setActiveTab('sections')">
       Sections
     </button>
-    <button 
-      class="tab-button" 
+    <button
+      class="tab-button"
       [class.active]="activeTab === 'subjects'"
       [disabled]="!selectedSection"
       (click)="setActiveTab('subjects')">
       Subjects
     </button>
-    <button 
-      class="tab-button" 
+    <button
+      class="tab-button"
       [class.active]="activeTab === 'content'"
       [disabled]="!selectedSubject"
       (click)="setActiveTab('content')">
       Content
     </button>
-    <button 
-      class="tab-button" 
+    <button
+      class="tab-button"
       [class.active]="activeTab === 'users'"
       (click)="setActiveTab('users')">
       Users
@@ -34,493 +34,502 @@
   </nav>
 
   <!-- Sections Tab -->
-  <div class="tab-content" *ngIf="activeTab === 'sections'">
-    <div class="section-management">
-      <!-- Create Section Form -->
-      <div class="card create-form">
-        <div class="card-header">
-          <h2>Create New Section</h2>
-        </div>
-        <div class="card-content">
-          <form [formGroup]="sectionForm" (ngSubmit)="createSection()">
-            <div class="form-field">
-              <label for="sectionTitle">Section Title</label>
-              <input 
-                id="sectionTitle"
-                type="text" 
-                formControlName="title" 
-                placeholder="Enter section title"
-                class="form-input">
-            </div>
-
-            <div class="form-field">
-              <label for="sectionDescription">Description</label>
-              <textarea 
-                id="sectionDescription"
-                formControlName="description" 
-                rows="3" 
-                placeholder="Enter section description"
-                class="form-textarea"></textarea>
-            </div>
-
-            <div class="form-field">
-              <label for="sectionOrder">Order</label>
-              <input 
-                id="sectionOrder"
-                type="number" 
-                formControlName="order" 
-                placeholder="0"
-                class="form-input">
-            </div>
-
-            <div class="form-field checkbox-field">
-              <label class="checkbox-label">
-                <input type="checkbox" formControlName="isPublished" class="checkbox-input">
-                <span class="checkbox-custom"></span>
-                Published
-              </label>
-            </div>
-
-            <div class="form-actions">
-              <button type="submit" class="btn btn-primary" [disabled]="!sectionForm.valid">
-                Create Section
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <!-- Sections List -->
-      <div class="card sections-list">
-        <div class="card-header">
-          <h2>Existing Sections</h2>
-        </div>
-        <div class="card-content">
-          <div class="sections-container">
-            <div *ngFor="let section of sections; let i = index" 
-                 class="section-item" 
-                 [class.selected]="selectedSection?.id === section.id"
-                 (click)="selectSection(section)">
-              <div class="section-info">
-                <h3>{{ section.title }}</h3>
-                <p>{{ section.description }}</p>
-                <div class="section-meta">
-                  <span class="order">Order: {{ section.order }}</span>
-                  <span class="status" [class.published]="section.isPublished">
-                    {{ section.isPublished ? 'Published' : 'Draft' }}
-                  </span>
-                  <span class="subjects-count">{{ section.subjects.length || 0 }} subjects</span>
-                </div>
-              </div>
-              <div class="section-actions">
-                <button class="btn-icon" (click)="toggleSectionPublished(section); $event.stopPropagation()" title="Toggle Published">
-                  <span class="icon">{{ section.isPublished ? '👁️' : '👁️‍🗨️' }}</span>
-                </button>
-                <button class="btn-icon delete" (click)="deleteSection(section); $event.stopPropagation()" title="Delete Section">
-                  <span class="icon">🗑️</span>
-                </button>
-                <button class="btn-icon" (click)="moveSection(i, i-1); $event.stopPropagation()" [disabled]="i === 0" title="Move Up">
-                  <span class="icon">⬆️</span>
-                </button>
-                <button class="btn-icon" (click)="moveSection(i, i+1); $event.stopPropagation()" [disabled]="i === sections.length - 1" title="Move Down">
-                  <span class="icon">⬇️</span>
-                </button>
-              </div>
-            </div>
+  @if (activeTab === 'sections') {
+    <div class="tab-content">
+      <div class="section-management">
+        <!-- Create Section Form -->
+        <div class="card create-form">
+          <div class="card-header">
+            <h2>Create New Section</h2>
           </div>
-          <div *ngIf="sections.length === 0" class="empty-state">
-            No sections created yet. Create your first section above.
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Subjects Tab -->
-  <div class="tab-content" *ngIf="activeTab === 'subjects' && selectedSection">
-    <div class="subjects-management">
-      <div class="selected-section-info">
-        <h2>Managing subjects for: {{ selectedSection.title }}</h2>
-      </div>
-
-      <!-- Create Subject Form -->
-      <div class="card create-form">
-        <div class="card-header">
-          <h2>Create New Subject</h2>
-        </div>
-        <div class="card-content">
-          <form [formGroup]="subjectForm" (ngSubmit)="createSubject()">
-            <div class="form-field">
-              <label for="subjectTitle">Subject Title</label>
-              <input 
-                id="subjectTitle"
-                type="text" 
-                formControlName="title" 
-                placeholder="Enter subject title"
-                class="form-input">
-            </div>
-
-            <div class="form-field">
-              <label for="subjectDescription">Description</label>
-              <textarea 
-                id="subjectDescription"
-                formControlName="description" 
-                rows="3" 
-                placeholder="Enter subject description"
-                class="form-textarea"></textarea>
-            </div>
-
-            <div class="form-field">
-              <label for="subjectOrder">Order</label>
-              <input 
-                id="subjectOrder"
-                type="number" 
-                formControlName="order" 
-                placeholder="0"
-                class="form-input">
-            </div>
-
-            <div class="form-actions">
-              <button type="submit" class="btn btn-primary" [disabled]="!subjectForm.valid">
-                Create Subject
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <!-- Subjects List -->
-      <div class="card subjects-list">
-        <div class="card-header">
-          <h2>Subjects in {{ selectedSection.title }}</h2>
-        </div>
-        <div class="card-content">
-          <div class="subjects-container">
-            <div *ngFor="let subject of selectedSection.subjects; let i = index" 
-                 class="subject-item" 
-                 [class.selected]="selectedSubject?.id === subject.id"
-                 (click)="selectSubject(subject)">
-              <div class="subject-info">
-                <h3>{{ subject.title }}</h3>
-                <p>{{ subject.description }}</p>
-                <div class="subject-meta">
-                  <span class="order">Order: {{ subject.order }}</span>
-                  <span class="contents-count">{{ subject.contents.length || 0 }} contents</span>
-                </div>
-              </div>
-              <div class="subject-actions">
-                <button class="btn-icon delete" (click)="deleteSubject(subject); $event.stopPropagation()" title="Delete Subject">
-                  <span class="icon">🗑️</span>
-                </button>
-                <button class="btn-icon" (click)="moveSubject(i, i-1); $event.stopPropagation()" [disabled]="i === 0" title="Move Up">
-                  <span class="icon">⬆️</span>
-                </button>
-                <button class="btn-icon" (click)="moveSubject(i, i+1); $event.stopPropagation()" [disabled]="i === (selectedSection.subjects.length || 0) - 1" title="Move Down">
-                  <span class="icon">⬇️</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div *ngIf="!selectedSection.subjects || selectedSection.subjects.length === 0" class="empty-state">
-            No subjects created yet. Create your first subject above.
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Content Tab -->
-  <div class="tab-content" *ngIf="activeTab === 'content' && selectedSubject">
-    <div class="content-management">
-      <div class="selected-context">
-        <h2>Managing content for: {{ selectedSubject.title }}</h2>
-        <p>Section: {{ selectedSection?.title }}</p>
-        <p><strong>Total Max Points in Subject:</strong> {{ getSubjectTotalPoints(selectedSubject) }}</p>
-      </div>
-
-      <!-- Content Type Selection -->
-      <div class="card content-type-selection">
-        <div class="card-header">
-          <h2>{{ isEditingContent ? 'Edit' : 'Create' }} Content</h2>
-        </div>
-        <div class="card-content">
-          <div class="form-field">
-            <label for="contentType">Content Type</label>
-            <select 
-              id="contentType"
-              [(ngModel)]="selectedContentType" 
-              (ngModelChange)="onContentTypeChange()"
-              class="form-select">
-              <option *ngFor="let type of contentTypes" [value]="type.value">
-                {{ type.label }}
-              </option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- Content Creation Form -->
-      <div class="card content-form">
-        <div class="card-content">
-          <form [formGroup]="contentForm" (ngSubmit)="createContent()">
-            
-            <!-- Theory Content -->
-            <div *ngIf="selectedContentType === 'theory'">
+          <div class="card-content">
+            <form [formGroup]="sectionForm" (ngSubmit)="createSection()">
               <div class="form-field">
-                <label for="theoryTitle">Title</label>
-                <input 
-                  id="theoryTitle"
-                  type="text" 
-                  formControlName="title" 
-                  placeholder="Enter theory title"
+                <label for="sectionTitle">Section Title</label>
+                <input
+                  id="sectionTitle"
+                  type="text"
+                  formControlName="title"
+                  placeholder="Enter section title"
                   class="form-input">
-              </div>
-
-              <div class="form-field">
-                <label for="theoryContent">Content</label>
-                <textarea 
-                  id="theoryContent"
-                  formControlName="content" 
-                  rows="6" 
-                  placeholder="Enter theory content"
-                  class="form-textarea"></textarea>
-              </div>
-
-              <div formGroupName="codeSegment" class="code-segment">
-                <h4>Optional Code Segment</h4>
-                <div class="form-field">
-                  <label for="codeSnippet">Code</label>
-                  <textarea 
-                    id="codeSnippet"
-                    formControlName="code" 
-                    rows="4" 
-                    placeholder="Enter code example"
-                    class="form-textarea"></textarea>
                 </div>
-
-                <input type="hidden" id="codeLanguage" formControlName="language" value="python"/>
-
                 <div class="form-field">
-                  <label for="codeExplanation">Code Explanation</label>
-                  <textarea 
-                    id="codeExplanation"
-                    formControlName="explanation" 
-                    rows="2" 
-                    placeholder="Explain the code"
-                    class="form-textarea"></textarea>
-                </div>
-              </div>
-            </div>
-
-            <!-- Multiple Choice Question -->
-            <div *ngIf="selectedContentType === 'mcq'">
-              <div class="form-field">
-                <label for="mcqTitle">Title</label>
-                <input 
-                  id="mcqTitle"
-                  type="text" 
-                  formControlName="title" 
-                  placeholder="Enter question title"
-                  class="form-input">
-              </div>
-
-              <div class="form-field">
-                <label for="mcqQuestion">Question</label>
-                <textarea 
-                  id="mcqQuestion"
-                  formControlName="question" 
-                  rows="3" 
-                  placeholder="Enter your question"
+                  <label for="sectionDescription">Description</label>
+                  <textarea
+                    id="sectionDescription"
+                    formControlName="description"
+                    rows="3"
+                    placeholder="Enter section description"
                   class="form-textarea"></textarea>
-              </div>
-
-              <div class="form-field">
-                <label for="mcqTime">Time Limit (seconds)</label>
-                <input id="mcqTime" type="number" formControlName="timeLimitSeconds" class="form-input" placeholder="e.g. 30" />
-              </div>
-
-              <div class="form-field">
-                <label for="mcqPoints">Max Points</label>
-                <input id="mcqPoints" type="number" formControlName="maxPoints" class="form-input" placeholder="e.g. 5" />
-              </div>
-
-              <div class="options-section">
-                <h4>Options</h4>
-                <div *ngFor="let optionControl of optionsArray.controls; let i = index" class="option-row">
-                  <div class="form-field">
-                    <label [for]="'option' + i">Option {{ i + 1 }}</label>
-                    <input 
-                      [id]="'option' + i"
-                      type="text"
-                      [formControl]="$any(optionControl)" 
-                      placeholder="Enter option"
-                      class="form-input">
+                </div>
+                <div class="form-field">
+                  <label for="sectionOrder">Order</label>
+                  <input
+                    id="sectionOrder"
+                    type="number"
+                    formControlName="order"
+                    placeholder="0"
+                    class="form-input">
                   </div>
-                  <button type="button" class="btn-icon delete" (click)="removeOption(i)" [disabled]="optionsArray.length <= 2">
-                    <span class="icon">❌</span>
-                  </button>
+                  <div class="form-field checkbox-field">
+                    <label class="checkbox-label">
+                      <input type="checkbox" formControlName="isPublished" class="checkbox-input">
+                      <span class="checkbox-custom"></span>
+                      Published
+                    </label>
+                  </div>
+                  <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" [disabled]="!sectionForm.valid">
+                      Create Section
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <!-- Sections List -->
+            <div class="card sections-list">
+              <div class="card-header">
+                <h2>Existing Sections</h2>
+              </div>
+              <div class="card-content">
+                <div class="sections-container">
+                  @for (section of sections; track section; let i = $index) {
+                    <div
+                      class="section-item"
+                      [class.selected]="selectedSection?.id === section.id"
+                      (click)="selectSection(section)">
+                      <div class="section-info">
+                        <h3>{{ section.title }}</h3>
+                        <p>{{ section.description }}</p>
+                        <div class="section-meta">
+                          <span class="order">Order: {{ section.order }}</span>
+                          <span class="status" [class.published]="section.isPublished">
+                            {{ section.isPublished ? 'Published' : 'Draft' }}
+                          </span>
+                          <span class="subjects-count">{{ section.subjects.length || 0 }} subjects</span>
+                        </div>
+                      </div>
+                      <div class="section-actions">
+                        <button class="btn-icon" (click)="toggleSectionPublished(section); $event.stopPropagation()" title="Toggle Published">
+                          <span class="icon">{{ section.isPublished ? '👁️' : '👁️‍🗨️' }}</span>
+                        </button>
+                        <button class="btn-icon delete" (click)="deleteSection(section); $event.stopPropagation()" title="Delete Section">
+                          <span class="icon">🗑️</span>
+                        </button>
+                        <button class="btn-icon" (click)="moveSection(i, i-1); $event.stopPropagation()" [disabled]="i === 0" title="Move Up">
+                          <span class="icon">⬆️</span>
+                        </button>
+                        <button class="btn-icon" (click)="moveSection(i, i+1); $event.stopPropagation()" [disabled]="i === sections.length - 1" title="Move Down">
+                          <span class="icon">⬇️</span>
+                        </button>
+                      </div>
+                    </div>
+                  }
                 </div>
-                <button type="button" class="btn btn-secondary" (click)="addOption()">
-                  ➕ Add Option
-                </button>
-              </div>
-
-              <div class="form-field">
-                <label for="correctAnswer">Correct Answer</label>
-                <select id="correctAnswer" formControlName="correctAnswer" class="form-select">
-                  <option *ngFor="let option of optionsArray.controls; let i = index" [value]="i">
-                    Option {{ i + 1 }}
-                  </option>
-                </select>
-              </div>
-            </div>
-
-            <!-- True/False Question -->
-            <div *ngIf="selectedContentType === 'truefalse'">
-              <div class="form-field">
-                <label for="tfTitle">Title</label>
-                <input 
-                  id="tfTitle"
-                  type="text" 
-                  formControlName="title" 
-                  placeholder="Enter question title"
-                  class="form-input">
-              </div>
-
-              <div class="form-field">
-                <label for="tfQuestion">Question</label>
-                <textarea 
-                  id="tfQuestion"
-                  formControlName="question" 
-                  rows="3" 
-                  placeholder="Enter your true/false question"
-                  class="form-textarea"></textarea>
-              </div>
-
-              <div class="form-field">
-                <label for="tfTime">Time Limit (seconds)</label>
-                <input id="tfTime" type="number" formControlName="timeLimitSeconds" class="form-input" placeholder="e.g. 15" />
-              </div>
-
-              <div class="form-field">
-                <label for="tfPoints">Max Points</label>
-                <input id="tfPoints" type="number" formControlName="maxPoints" class="form-input" placeholder="e.g. 2" />
-              </div>
-
-              <div class="form-field">
-                <label for="tfAnswer">Correct Answer</label>
-                <select id="tfAnswer" formControlName="correctAnswer" class="form-select">
-                  <option [value]="true">True</option>
-                  <option [value]="false">False</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Common fields -->
-            <div class="form-field">
-              <label for="contentOrder">Order</label>
-              <input 
-                id="contentOrder"
-                type="number" 
-                formControlName="order" 
-                placeholder="Content order"
-                class="form-input">
-            </div>
-
-            <div class="form-actions">
-              <button type="submit" class="btn btn-primary" [disabled]="!contentForm.valid">
-                {{ isEditingContent ? 'Update' : 'Create' }} Content
-              </button>
-              <button type="button" class="btn btn-secondary" (click)="resetContentForm()" *ngIf="isEditingContent">
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <!-- Existing Content List -->
-      <div class="card content-list" *ngIf="selectedSubject.contents && selectedSubject.contents.length > 0">
-        <div class="card-header">
-          <h2>Existing Content</h2>
-        </div>
-        <div class="card-content">
-          <div class="content-items">
-            <div *ngFor="let content of selectedSubject.contents" class="content-item">
-              <div class="content-info">
-                <span class="content-type-badge">{{ getContentTypeLabel(content) }}</span>
-                <h4>{{ getContentPreview(content) }}</h4>
-                <span class="content-order">Order: {{ content.order }}</span>
-              </div>
-              <div class="content-actions">
-                <button class="btn-icon" (click)="startEditContent(content); setActiveTab('content'); $event.stopPropagation()" title="Edit Content">
-                  <span class="icon">✏️</span>
-                </button>
-                <button class="btn-icon delete" (click)="deleteContent(content); $event.stopPropagation()" title="Delete Content">
-                  <span class="icon">🗑️</span>
-                </button>
+                @if (sections.length === 0) {
+                  <div class="empty-state">
+                    No sections created yet. Create your first section above.
+                  </div>
+                }
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
+      }
 
-  <!-- Users Tab -->
-  <div class="tab-content" *ngIf="activeTab === 'users'">
-    <div class="users-management">
-      <div class="card users-list">
-        <div class="card-header">
-          <h2>User Management</h2>
-        </div>
-        <div class="card-content">
-          <div class="users-table-container">
-            <table class="users-table">
-              <thead>
-                <tr>
-                  <th>Display Name</th>
-                  <th>Email</th>
-                  <th>Created</th>
-                  <th>Admin Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let user of users" class="user-row">
-                  <td class="user-name">{{ user.displayName || 'N/A' }}</td>
-                  <td class="user-email">{{ user.email }}</td>
-                  <td class="user-created">{{ user.createdAt | date:'short' }}</td>
-                  <td class="user-admin-status">
-                    <span class="admin-badge" [class.admin]="user.isAdmin" [class.regular]="!user.isAdmin">
-                      {{ user.isAdmin ? 'Admin' : 'User' }}
-                    </span>
-                  </td>
-                  <td class="user-actions">
-                    <button 
-                      *ngIf="!user.isAdmin" 
-                      class="btn btn-primary btn-small"
-                      (click)="promoteToAdmin(user)"
-                      title="Promote to Admin">
-                      Make Admin
-                    </button>
-                    <button 
-                      *ngIf="user.isAdmin" 
-                      class="btn btn-secondary btn-small"
-                      (click)="demoteFromAdmin(user)"
-                      title="Remove Admin">
-                      Remove Admin
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div *ngIf="users.length === 0" class="empty-state">
-              No users found.
+      <!-- Subjects Tab -->
+      @if (activeTab === 'subjects' && selectedSection) {
+        <div class="tab-content">
+          <div class="subjects-management">
+            <div class="selected-section-info">
+              <h2>Managing subjects for: {{ selectedSection.title }}</h2>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+            <!-- Create Subject Form -->
+            <div class="card create-form">
+              <div class="card-header">
+                <h2>Create New Subject</h2>
+              </div>
+              <div class="card-content">
+                <form [formGroup]="subjectForm" (ngSubmit)="createSubject()">
+                  <div class="form-field">
+                    <label for="subjectTitle">Subject Title</label>
+                    <input
+                      id="subjectTitle"
+                      type="text"
+                      formControlName="title"
+                      placeholder="Enter subject title"
+                      class="form-input">
+                    </div>
+                    <div class="form-field">
+                      <label for="subjectDescription">Description</label>
+                      <textarea
+                        id="subjectDescription"
+                        formControlName="description"
+                        rows="3"
+                        placeholder="Enter subject description"
+                      class="form-textarea"></textarea>
+                    </div>
+                    <div class="form-field">
+                      <label for="subjectOrder">Order</label>
+                      <input
+                        id="subjectOrder"
+                        type="number"
+                        formControlName="order"
+                        placeholder="0"
+                        class="form-input">
+                      </div>
+                      <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" [disabled]="!subjectForm.valid">
+                          Create Subject
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <!-- Subjects List -->
+                <div class="card subjects-list">
+                  <div class="card-header">
+                    <h2>Subjects in {{ selectedSection.title }}</h2>
+                  </div>
+                  <div class="card-content">
+                    <div class="subjects-container">
+                      @for (subject of selectedSection.subjects; track subject; let i = $index) {
+                        <div
+                          class="subject-item"
+                          [class.selected]="selectedSubject?.id === subject.id"
+                          (click)="selectSubject(subject)">
+                          <div class="subject-info">
+                            <h3>{{ subject.title }}</h3>
+                            <p>{{ subject.description }}</p>
+                            <div class="subject-meta">
+                              <span class="order">Order: {{ subject.order }}</span>
+                              <span class="contents-count">{{ subject.contents.length || 0 }} contents</span>
+                            </div>
+                          </div>
+                          <div class="subject-actions">
+                            <button class="btn-icon delete" (click)="deleteSubject(subject); $event.stopPropagation()" title="Delete Subject">
+                              <span class="icon">🗑️</span>
+                            </button>
+                            <button class="btn-icon" (click)="moveSubject(i, i-1); $event.stopPropagation()" [disabled]="i === 0" title="Move Up">
+                              <span class="icon">⬆️</span>
+                            </button>
+                            <button class="btn-icon" (click)="moveSubject(i, i+1); $event.stopPropagation()" [disabled]="i === (selectedSection.subjects.length || 0) - 1" title="Move Down">
+                              <span class="icon">⬇️</span>
+                            </button>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                    @if (!selectedSection.subjects || selectedSection.subjects.length === 0) {
+                      <div class="empty-state">
+                        No subjects created yet. Create your first subject above.
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Content Tab -->
+          @if (activeTab === 'content' && selectedSubject) {
+            <div class="tab-content">
+              <div class="content-management">
+                <div class="selected-context">
+                  <h2>Managing content for: {{ selectedSubject.title }}</h2>
+                  <p>Section: {{ selectedSection?.title }}</p>
+                  <p><strong>Total Max Points in Subject:</strong> {{ getSubjectTotalPoints(selectedSubject) }}</p>
+                </div>
+                <!-- Content Type Selection -->
+                <div class="card content-type-selection">
+                  <div class="card-header">
+                    <h2>{{ isEditingContent ? 'Edit' : 'Create' }} Content</h2>
+                  </div>
+                  <div class="card-content">
+                    <div class="form-field">
+                      <label for="contentType">Content Type</label>
+                      <select
+                        id="contentType"
+                        [(ngModel)]="selectedContentType"
+                        (ngModelChange)="onContentTypeChange()"
+                        class="form-select">
+                        @for (type of contentTypes; track type) {
+                          <option [value]="type.value">
+                            {{ type.label }}
+                          </option>
+                        }
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <!-- Content Creation Form -->
+                <div class="card content-form">
+                  <div class="card-content">
+                    <form [formGroup]="contentForm" (ngSubmit)="createContent()">
+                      <!-- Theory Content -->
+                      @if (selectedContentType === 'theory') {
+                        <div>
+                          <div class="form-field">
+                            <label for="theoryTitle">Title</label>
+                            <input
+                              id="theoryTitle"
+                              type="text"
+                              formControlName="title"
+                              placeholder="Enter theory title"
+                              class="form-input">
+                            </div>
+                            <div class="form-field">
+                              <label for="theoryContent">Content</label>
+                              <textarea
+                                id="theoryContent"
+                                formControlName="content"
+                                rows="6"
+                                placeholder="Enter theory content"
+                              class="form-textarea"></textarea>
+                            </div>
+                            <div formGroupName="codeSegment" class="code-segment">
+                              <h4>Optional Code Segment</h4>
+                              <div class="form-field">
+                                <label for="codeSnippet">Code</label>
+                                <textarea
+                                  id="codeSnippet"
+                                  formControlName="code"
+                                  rows="4"
+                                  placeholder="Enter code example"
+                                class="form-textarea"></textarea>
+                              </div>
+                              <input type="hidden" id="codeLanguage" formControlName="language" value="python"/>
+                              <div class="form-field">
+                                <label for="codeExplanation">Code Explanation</label>
+                                <textarea
+                                  id="codeExplanation"
+                                  formControlName="explanation"
+                                  rows="2"
+                                  placeholder="Explain the code"
+                                class="form-textarea"></textarea>
+                              </div>
+                            </div>
+                          </div>
+                        }
+                        <!-- Multiple Choice Question -->
+                        @if (selectedContentType === 'mcq') {
+                          <div>
+                            <div class="form-field">
+                              <label for="mcqTitle">Title</label>
+                              <input
+                                id="mcqTitle"
+                                type="text"
+                                formControlName="title"
+                                placeholder="Enter question title"
+                                class="form-input">
+                              </div>
+                              <div class="form-field">
+                                <label for="mcqQuestion">Question</label>
+                                <textarea
+                                  id="mcqQuestion"
+                                  formControlName="question"
+                                  rows="3"
+                                  placeholder="Enter your question"
+                                class="form-textarea"></textarea>
+                              </div>
+                              <div class="form-field">
+                                <label for="mcqTime">Time Limit (seconds)</label>
+                                <input id="mcqTime" type="number" formControlName="timeLimitSeconds" class="form-input" placeholder="e.g. 30" />
+                              </div>
+                              <div class="form-field">
+                                <label for="mcqPoints">Max Points</label>
+                                <input id="mcqPoints" type="number" formControlName="maxPoints" class="form-input" placeholder="e.g. 5" />
+                              </div>
+                              <div class="options-section">
+                                <h4>Options</h4>
+                                @for (optionControl of optionsArray.controls; track optionControl; let i = $index) {
+                                  <div class="option-row">
+                                    <div class="form-field">
+                                      <label [for]="'option' + i">Option {{ i + 1 }}</label>
+                                      <input
+                                        [id]="'option' + i"
+                                        type="text"
+                                        [formControl]="$any(optionControl)"
+                                        placeholder="Enter option"
+                                        class="form-input">
+                                      </div>
+                                      <button type="button" class="btn-icon delete" (click)="removeOption(i)" [disabled]="optionsArray.length <= 2">
+                                        <span class="icon">❌</span>
+                                      </button>
+                                    </div>
+                                  }
+                                  <button type="button" class="btn btn-secondary" (click)="addOption()">
+                                    ➕ Add Option
+                                  </button>
+                                </div>
+                                <div class="form-field">
+                                  <label for="correctAnswer">Correct Answer</label>
+                                  <select id="correctAnswer" formControlName="correctAnswer" class="form-select">
+                                    @for (option of optionsArray.controls; track option; let i = $index) {
+                                      <option [value]="i">
+                                        Option {{ i + 1 }}
+                                      </option>
+                                    }
+                                  </select>
+                                </div>
+                              </div>
+                            }
+                            <!-- True/False Question -->
+                            @if (selectedContentType === 'truefalse') {
+                              <div>
+                                <div class="form-field">
+                                  <label for="tfTitle">Title</label>
+                                  <input
+                                    id="tfTitle"
+                                    type="text"
+                                    formControlName="title"
+                                    placeholder="Enter question title"
+                                    class="form-input">
+                                  </div>
+                                  <div class="form-field">
+                                    <label for="tfQuestion">Question</label>
+                                    <textarea
+                                      id="tfQuestion"
+                                      formControlName="question"
+                                      rows="3"
+                                      placeholder="Enter your true/false question"
+                                    class="form-textarea"></textarea>
+                                  </div>
+                                  <div class="form-field">
+                                    <label for="tfTime">Time Limit (seconds)</label>
+                                    <input id="tfTime" type="number" formControlName="timeLimitSeconds" class="form-input" placeholder="e.g. 15" />
+                                  </div>
+                                  <div class="form-field">
+                                    <label for="tfPoints">Max Points</label>
+                                    <input id="tfPoints" type="number" formControlName="maxPoints" class="form-input" placeholder="e.g. 2" />
+                                  </div>
+                                  <div class="form-field">
+                                    <label for="tfAnswer">Correct Answer</label>
+                                    <select id="tfAnswer" formControlName="correctAnswer" class="form-select">
+                                      <option [value]="true">True</option>
+                                      <option [value]="false">False</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              }
+                              <!-- Common fields -->
+                              <div class="form-field">
+                                <label for="contentOrder">Order</label>
+                                <input
+                                  id="contentOrder"
+                                  type="number"
+                                  formControlName="order"
+                                  placeholder="Content order"
+                                  class="form-input">
+                                </div>
+                                <div class="form-actions">
+                                  <button type="submit" class="btn btn-primary" [disabled]="!contentForm.valid">
+                                    {{ isEditingContent ? 'Update' : 'Create' }} Content
+                                  </button>
+                                  @if (isEditingContent) {
+                                    <button type="button" class="btn btn-secondary" (click)="resetContentForm()">
+                                      Cancel
+                                    </button>
+                                  }
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                          <!-- Existing Content List -->
+                          @if (selectedSubject.contents && selectedSubject.contents.length > 0) {
+                            <div class="card content-list">
+                              <div class="card-header">
+                                <h2>Existing Content</h2>
+                              </div>
+                              <div class="card-content">
+                                <div class="content-items">
+                                  @for (content of selectedSubject.contents; track content) {
+                                    <div class="content-item">
+                                      <div class="content-info">
+                                        <span class="content-type-badge">{{ getContentTypeLabel(content) }}</span>
+                                        <h4>{{ getContentPreview(content) }}</h4>
+                                        <span class="content-order">Order: {{ content.order }}</span>
+                                      </div>
+                                      <div class="content-actions">
+                                        <button class="btn-icon" (click)="startEditContent(content); setActiveTab('content'); $event.stopPropagation()" title="Edit Content">
+                                          <span class="icon">✏️</span>
+                                        </button>
+                                        <button class="btn-icon delete" (click)="deleteContent(content); $event.stopPropagation()" title="Delete Content">
+                                          <span class="icon">🗑️</span>
+                                        </button>
+                                      </div>
+                                    </div>
+                                  }
+                                </div>
+                              </div>
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    }
+
+                    <!-- Users Tab -->
+                    @if (activeTab === 'users') {
+                      <div class="tab-content">
+                        <div class="users-management">
+                          <div class="card users-list">
+                            <div class="card-header">
+                              <h2>User Management</h2>
+                            </div>
+                            <div class="card-content">
+                              <div class="users-table-container">
+                                <table class="users-table">
+                                  <thead>
+                                    <tr>
+                                      <th>Display Name</th>
+                                      <th>Email</th>
+                                      <th>Created</th>
+                                      <th>Admin Status</th>
+                                      <th>Actions</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    @for (user of users; track user) {
+                                      <tr class="user-row">
+                                        <td class="user-name">{{ user.displayName || 'N/A' }}</td>
+                                        <td class="user-email">{{ user.email }}</td>
+                                        <td class="user-created">{{ user.createdAt | date:'short' }}</td>
+                                        <td class="user-admin-status">
+                                          <span class="admin-badge" [class.admin]="user.isAdmin" [class.regular]="!user.isAdmin">
+                                            {{ user.isAdmin ? 'Admin' : 'User' }}
+                                          </span>
+                                        </td>
+                                        <td class="user-actions">
+                                          @if (!user.isAdmin) {
+                                            <button
+                                              class="btn btn-primary btn-small"
+                                              (click)="promoteToAdmin(user)"
+                                              title="Promote to Admin">
+                                              Make Admin
+                                            </button>
+                                          }
+                                          @if (user.isAdmin) {
+                                            <button
+                                              class="btn btn-secondary btn-small"
+                                              (click)="demoteFromAdmin(user)"
+                                              title="Remove Admin">
+                                              Remove Admin
+                                            </button>
+                                          }
+                                        </td>
+                                      </tr>
+                                    }
+                                  </tbody>
+                                </table>
+                                @if (users.length === 0) {
+                                  <div class="empty-state">
+                                    No users found.
+                                  </div>
+                                }
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </div>
