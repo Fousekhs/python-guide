@@ -1,0 +1,97 @@
+.section-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;    
+}
+
+.logo {
+    width: 15rem;
+    height: 15rem;
+    margin: 0 auto;
+}
+
+.container {
+    height: 100vh;
+    width: 100vw !important;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+}
+
+.home-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-container {
+  display: flex;
+  flex-grow: 1;
+}
+
+header {
+  background: var(--dark-blue);
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.login-button {
+  position: relative;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  background: none;
+  color: var(--white);
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.login-button:hover {
+  color: var(--electric-blue);
+}
+
+.login-label {
+  /* hide it initially */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(4px);
+  transition:
+    opacity 0.2s ease-in-out,
+    transform 0.2s ease-in-out,
+    visibility 0s 0.2s; /* delay hiding the visibility until after the fade */
+}
+
+/* when the user hovers the button, show the label */
+.login-button:hover .login-label {
+  opacity: 1;
+  visibility: visible;    /* makes it take up space so opacity can show it */
+  transform: translateY(0);
+  transition-delay: 0s;   /* show visibility immediately */
+}
+
+.header-title{
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.user-info {
+  color: var(--electric-blue);
+  font-weight: bold;
+  font-size: .8rem;
+}

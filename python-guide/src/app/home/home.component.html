@@ -1,0 +1,92 @@
+<div class="container">
+  <header>
+    <div class="header-title">
+      <h2>Python Guide</h2>
+
+      @let isAuthenticated = (userIsAuthenticated$ | async);
+      @if (isAuthenticated) {
+        <div class="user-info">
+          {{ userDisplayName$ | async }}
+        </div>
+
+        <div style="flex-grow: 1;"></div>
+
+        <button *ngIf="isAuthenticated" class="login-button" (click)="logout()">
+          <div class="login-label">
+            Logout
+          </div>
+          <svg-log-out />
+        </button>
+      } @else {
+        <div style="flex-grow: 1;"></div>
+        <button class="login-button" (click)="login()">
+          <div class="login-label">
+            Login/Register
+          </div>
+          <svg-login-icon />
+        </button>
+      }
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="logo">
+      <svg-python />
+    </div>
+    <h2 style="text-align: center;">Welcome, {{ userDisplayName$ | async }}!</h2>
+
+    <app-section-container>
+      @let sections = (sections$ | async);
+      @if (sections?.length) {
+        <ng-container *ngFor="let section of sections">
+          <app-section [title]="section.title">
+            <div class="section-content">
+              @let subjects = section.subjects;
+              @if (!subjects?.length) {
+                <p>No subjects available.</p>
+              } @else {
+                @for (subject of subjects; track subject.id) {
+                  <app-subject-card
+                    [title]="subject.title"
+                    [status]="'first'"
+                    [available]="true"
+                    [destination]="['/lesson', section.id, subject.id]"
+                  ></app-subject-card>
+                }
+              }
+            </div>
+          </app-section>
+        </ng-container>
+      } @else {
+        <p>Loading content...</p>
+      }
+      <!-- <app-section [title]="'Section 1'">
+        <div class="section-content">
+          <app-subject-card
+            title="Physics"
+            status="passed"
+            [available]="true"
+            [destination]="['/lesson', '1']"
+          ></app-subject-card>
+
+          <app-subject-card
+            title="Chemistry"
+            status="failed"
+            [available]="true"
+          ></app-subject-card>
+
+          <app-subject-card title="Mathematics" status="first"></app-subject-card>
+          <app-subject-card title="Mathematics" status="first"></app-subject-card>
+          <app-subject-card title="Mathematics" status="first"></app-subject-card>
+        </div>
+      </app-section>
+
+      <app-section [title]="'Section 2'">
+        <p>Section 2</p>
+      </app-section>
+      <app-section [title]="'Section 3'">
+        <p>Section 3</p>
+      </app-section> -->
+    </app-section-container>
+  </div>
+</div>

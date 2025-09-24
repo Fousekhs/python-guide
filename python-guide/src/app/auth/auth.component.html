@@ -1,0 +1,47 @@
+<div class="auth-wrapper">
+  <div class="auth-container">
+    <h2>{{ isRegisterMode ? 'Register' : 'Login' }}</h2>
+
+    <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" />
+      </div>
+
+      <div class="form-group" *ngIf="isRegisterMode">
+        <label for="username">Username</label>
+        <input id="username" type="text" formControlName="displayName" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" type="password" formControlName="password" />
+      </div>
+
+      <div class="form-group" *ngIf="isRegisterMode">
+        <label for="confirmPassword">Confirm Password</label>
+        <input id="confirmPassword" type="password" formControlName="confirmPassword" />
+        <div *ngIf="showPasswordMismatch" class="error">
+          Passwords do not match
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="authForm.invalid">
+        {{ isRegisterMode ? 'Register' : 'Login' }}
+      </button>
+      <div *ngIf="errorMessage !== null" class="error">
+        {{ errorMessage }}
+      </div>
+    </form>
+
+    <div class="nav-btns">
+        <button class="nav-btn" (click)="toggleMode()">
+          {{ isRegisterMode ? 'Already have an account?' : 'Create an account' }}
+        </button>
+        <div>
+            or
+        </div>
+        <button class="nav-btn" (click)="goBack()">Go to Home</button>
+    </div>
+  </div>
+</div>

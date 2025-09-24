@@ -1,0 +1,29 @@
+<div class="mcq-container">
+  <h3 class="mcq-title">{{ title }}</h3>
+  <div *ngFor="let seg of question | codeParser">
+
+    <div *ngIf="seg.type === 'text'" class="question-text">
+      {{ seg.value }}
+    </div>
+
+    <app-code-viewer
+      *ngIf="seg.type === 'code'"
+      [code]="seg.value">
+    </app-code-viewer>
+  </div>
+  
+  <ul class="options-list">
+    <li *ngFor="let option of options" 
+        (click)="select(option)"
+        [class.correct]="option === options[correctAnswer]"
+        [class.selected]="option === selectedOption">
+      {{ option }}
+    </li>
+  </ul>
+
+  <div class="timer" [class.critical]="(countdown$ | async) !== null && (countdown$ | async)! <= 5">
+    <div>
+      Time Remaining: {{ countdown$ | async }} seconds
+    </div>
+  </div>
+</div>

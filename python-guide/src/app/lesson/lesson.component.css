@@ -1,0 +1,128 @@
+/* Ensure the page container fills the viewport and uses flex layout */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw !important;
+  margin: 0;    
+}
+
+/* Header stays at the top */
+.page-container > header {
+  flex: 0 0 auto;     /* do not grow or shrink */
+  background: var(--dark-blue);
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+}
+
+header > .space {
+    flex: 1;
+}
+
+/* Lesson content grows to fill remaining space and scrolls if overflow */
+.lesson-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background-image: url('../../assets/icons/python-logo.svg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+
+  flex: 1 1 auto;     /* can grow and shrink */
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+/* Footer stays at the bottom */
+.page-container > footer {
+  flex: 0 0 auto;     /* do not grow or shrink */
+  background: var(--dark-blue);;
+  padding: 1rem;
+  box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-button {
+  position: relative;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  background: none;
+  color: var(--white);
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+}
+.nav-button:hover {
+  color: var(--electric-blue);
+}
+
+.btn-label {
+  /* hide it initially */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(4px);
+  transition:
+    opacity 0.2s ease-in-out,
+    transform 0.2s ease-in-out,
+    visibility 0s 0.2s; /* delay hiding the visibility until after the fade */
+}
+
+/* when the user hovers the button, show the label */
+.nav-button:hover .btn-label {
+  opacity: 1;
+  visibility: visible;    /* makes it take up space so opacity can show it */
+  transform: translateY(0);
+  transition-delay: 0s;   /* show visibility immediately */
+}
+
+.nav-button:disabled{
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.timeout-message {
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: var(--dark-blue);
+  color: var(--white);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.next-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  background-color: var(--dark-blue);
+  color: var(--white);
+  border-bottom: 2px solid var(--electric-blue);
+  border-radius: 4px;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+.next-button:hover {
+  background-color: var(--electric-blue);
+  color: var(--dark-blue);
+}
+
+footer {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-around !important;
+}

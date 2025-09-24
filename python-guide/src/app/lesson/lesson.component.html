@@ -1,0 +1,76 @@
+<div class="page-container">
+    <header>
+        <h2>Lesson 1: Python Basics</h2>
+        <div class="space"></div>
+        <button class="nav-button" (click)="goHome()">
+            <span class="btn-label">Home</span> 
+            <svg-home />
+        </button>
+    </header>
+
+    <div class="lesson-container">
+    @if (timeout) {
+        <div class="timeout-message">
+            <h3>Time's Up!</h3>
+            <div>
+                It seems you have run out of time :(<br>
+                Don't worry you are going have another chance in the end!
+            </div>
+            <button class="next-button" (click)="goToNextLesson()">
+                Next
+            </button>
+        </div>
+    } @else if (finished) {
+        <div class="finished-message">
+            @if (!result) {
+                Please wait...
+            } @else {
+                @if (retry) {
+                    <div>
+                        You have completed the lesson!<br>
+                        Lets try again those questions you got wrong.
+                    </div>
+                    <button class="next-button" (click)="reviewIncorrectQuestions()">
+                        Review Incorrect Questions
+                    </button>
+                } @else {
+                    <div>
+                        Congratulations! You answered all questions correctly!
+                    </div>
+                }
+            }
+        </div>
+    } @else {
+        @switch (currentLesson.type) {
+            @case ('theory') {
+                <app-theory-unit [title]="currentLesson.title" [content]="currentLesson.content" (nextContent)="goToNextLesson()"></app-theory-unit>
+            }
+            @case ('truefalse') {
+                <app-mcq-unit [title]="currentLesson.title" [availableTime]="currentLesson.timeLimitSeconds ?? 10" [isRetry]="retry" [userId]="userId" [sessionId]="sessionId" [sectionId]="sectionId" [subjectId]="subjectId" [questionId]="currentLesson.id ?? ''" [question]="currentLesson.question" [options]="trueFalseOptions" [correctAnswer]="getTrueFalseCorrectAnswer(currentLesson.correctAnswer)" (questionAnswered)="goToNextLesson()" (timeUp)="timeUp()"></app-mcq-unit>
+            }
+            @case ('mcq') {
+                <app-mcq-unit [title]="currentLesson.title" [availableTime]="currentLesson.timeLimitSeconds ?? 10" [isRetry]="retry" [userId]="userId" [sessionId]="sessionId" [sectionId]="sectionId" [subjectId]="subjectId" [questionId]="currentLesson.id ?? ''" [question]="currentLesson.question" [options]="currentLesson.options" [correctAnswer]="currentLesson.correctAnswer" (questionAnswered)="goToNextLesson()" (timeUp)="timeUp()"></app-mcq-unit>
+            }
+            @default {
+                <p class="error">
+                    Something went wrong
+                </p>
+            }
+        }
+    }
+    </div>
+
+    @if (!timeout && !finished) {        
+        <footer>
+            <!-- <button class="nav-button" [disabled]="currentLessonIndex===0" (click)="goToPreviousLesson()">
+                <svg-chevron-left />
+                Previous
+            </button> -->
+            <capmax-progressbar [current]="currentLessonIndex+1" [total]="numberOfLessons"/>
+            <!-- <button class="nav-button" [disabled]="(currentLessonIndex+1)===numberOfLessons" (click)="goToNextLesson()">
+                Next
+                <svg-chevron-right />
+            </button> -->
+        </footer>
+    }
+</div>

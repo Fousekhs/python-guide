@@ -1,0 +1,55 @@
+.spoiler-wrapper {
+  display: inline-block;
+  border-radius: 0;
+  padding: 0.5em;
+  user-select: none;
+  min-width: 400px;
+}
+
+.spoiler-wrapper {
+  background-color: var(--dark-blue);
+  color: var(--white);
+}
+
+.first-spoiler {
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+}
+
+.last-spoiler {
+  border-bottom-left-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+}
+
+.spoiler-label .hint {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.icon {
+  transition-duration: .5s;
+}
+
+.spoiler-label .opened .icon {
+  transform: rotate(90deg);
+  transform-origin: center;
+}
+
+.title {
+  font-size: 1.25rem;
+  margin: 0;
+  color: var(--white);
+}
+
+.spoiler-content {
+  margin-top: 0.5em;
+  transition: opacity 0.3s ease;
+}
+
+.spoiler-content.hidden {
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}

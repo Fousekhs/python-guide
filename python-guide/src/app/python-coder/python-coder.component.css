@@ -1,0 +1,36 @@
+.challenge-container {
+  background-color: var(--dark-blue);
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.run-button {
+  background-color: var(--electric-blue);
+  color: var(--dark-blue);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.run-button:hover {
+  background-color: var(--white);
+  color: var(--dark-blue);
+}
+
+.output-box { 
+    font-family: 'Courier New', Courier, monospace;
+    background:#121212;
+    color: var(--white);
+    padding:0.5em;
+    min-height:50px; 
+}
+
+:host ::ng-deep .cm-editor {
+  /* reserve at least 10 lines at 1.2em line-height */
+  min-height: calc(1.2em * 3) !important;
+}

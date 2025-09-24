@@ -1,1 +1,49 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+    --charcoal-blue: #36454f;
+    --darkest-blue: #061826;
+    --dark-blue: #1a303f;
+    --blue: #2b505c;
+    --light-blue: #607d7e;
+    --grey-blue: #e4e9f2;
+    --ecru: #e6d6c1;
+    --light-brown: #7e695c;
+
+    --success-green: #00df50;
+    --failed-red: #e60331;
+    --disabled-grey: #bcc3cc;
+    --white: #f0f4f8;
+    --progress-green: #00bf40;
+    --electric-blue: #00f0ff;
+
+    --primary-color: var(--charcoal-blue);
+    --accent-color: var(--white);
+}
+
+@font-face {
+  font-family: 'sans-serif';
+  src: url('./assets/fonts/Manrope-Variable.ttf') format('truetype');
+  /* define the default axis values (optional) */
+  font-weight: 100 900;   /* declares that weight ranges from 100 to 900 */
+  font-stretch: 75% 125%; /* width axis: 75% (condensed) → 125% (expanded) */
+  font-style: normal;     /* if there’s an italic axis you’d use “oblique 0deg 15deg” */
+  font-display: swap;
+}
+
+* {
+  font-family: 'MyVariableFont', sans-serif;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;     
+    justify-content: center;
+    color: var(--accent-color);
+    background-color: var(--primary-color);
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

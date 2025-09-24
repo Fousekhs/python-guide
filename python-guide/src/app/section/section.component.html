@@ -1,0 +1,20 @@
+<div 
+  class="spoiler-wrapper" 
+  [class.first-spoiler]="first"
+  [class.last-spoiler]="last">
+  <div 
+    class="spoiler-label" 
+    (click)="toggle(true)">
+    <span 
+      class="hint"
+      [class.opened]="!hidden">
+      <span class="icon">
+        <svg-chevron-right />
+      </span>
+      <h3 class="title">{{ title }}</h3>
+    </span>
+  </div>
+  <div class="spoiler-content" [class.hidden]="hidden">
+    <ng-content></ng-content>
+  </div>
+</div>

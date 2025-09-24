@@ -1,0 +1,66 @@
+.mcq-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0 auto;
+  background-color: var(--dark-blue);
+  border-radius: 8px;
+  padding: 16px;
+  max-width: 400px;
+}
+
+.mcq-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--electric-blue);
+  align-self: center;
+  margin: 0.5rem 0 1rem 0;
+}
+
+.question-text {
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin-bottom: 12px;
+}
+
+.options-list {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.options-list li {
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-bottom: 2px solid var(--electric-blue);
+}
+
+.options-list li:hover {
+  background-color: var(--electric-blue);
+  color: var(--dark-blue);
+}
+
+.options-list li.selected {
+  background-color: var(--failed-red);
+  color: var(--white);
+}
+
+.options-list li.selected.correct {
+  background-color: var(--success-green);
+  color: var(--white);
+}
+
+.timer {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.9rem;
+  color: var(--electric-blue);
+}
+
+.critical {
+  color: var(--failed-red);
+}

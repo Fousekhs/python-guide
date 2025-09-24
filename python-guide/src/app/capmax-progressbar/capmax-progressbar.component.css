@@ -1,0 +1,27 @@
+.progress-wrapper {
+  display: flex;
+  align-items: center;
+  font-family: Arial, sans-serif;
+
+  .progress-bar-background {
+    position: relative;
+    width: 200px;
+    height: 20px;
+    background-color: var(--light-blue);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-right: 8px;
+
+    .progress-bar-foreground {
+      height: 100%;
+      background-color: var(--progress-green);
+      border-radius: 10px 0 0 10px;
+      transition: width 0.3s ease;
+    }
+  }
+
+  .progress-label {
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+}
