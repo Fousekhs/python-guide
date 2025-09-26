@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject, interval, NEVER } from 'rxjs';
 import { switchMap, scan, startWith, takeWhile, shareReplay, map } from 'rxjs/operators';
@@ -11,7 +11,7 @@ import { AttemptService, Attempt } from '../../services/attempt.service';
   templateUrl: './mcq-unit.component.html',
   styleUrl: './mcq-unit.component.css'
 })
-export class McqUnitComponent implements OnInit, OnDestroy {
+export class McqUnitComponent implements OnInit, OnDestroy, OnChanges {
   @Input() title: string = 'Multiple Choice Question';
   @Input() question: string = `What is the output of the following Python code?
   \\cx = "2"
@@ -38,12 +38,7 @@ print(x + y)\\c`;
 
   ngOnInit(): void {
     this.remainingTime = this.availableTime;
-    this.sub = this.countdown$.subscribe(value => {
-      this.countdownValue = value;
-      if (value === 0) {
-        this.timeUp.emit();
-      }
-    });
+    this.subscribeCountdown();
   }
 
   ngOnDestroy(): void {
@@ -53,17 +48,47 @@ print(x + y)\\c`;
   }
 
   private isRunning$ = new BehaviorSubject<boolean>(true); // start running by default
+  private reset$ = new BehaviorSubject<void>(undefined as unknown as void);
 
   private tick$ = this.isRunning$.pipe(
     switchMap(running => running ? interval(1000) : NEVER)
   );
 
-  countdown$ = this.tick$.pipe(
-    scan((acc) => acc - 1, this.availableTime),
-    startWith(this.availableTime),
-    takeWhile(v => v >= 0, true),
+  // Rebuild countdown on every reset trigger, first emitting the full availableTime value
+  countdown$ = this.reset$.pipe(
+    switchMap(() => this.tick$.pipe(
+      // Emit a sentinel immediately to push the initial full value before any ticks
+      startWith(-1 as any),
+      scan((acc: number, tick: number) => {
+        if (tick === -1) return this.availableTime; // initial emission after reset
+        return acc - 1;
+      }, this.availableTime),
+      takeWhile(v => v >= 0, true)
+    )),
     shareReplay({ bufferSize: 1, refCount: true })
   );
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // When the question changes (new id/options), restart the timer
+    if (changes['questionId'] || changes['question'] || changes['options'] || changes['correctAnswer']) {
+      this.selectedOption = null;
+      this.remainingTime = this.availableTime;
+      this.countdownValue = this.availableTime;
+      this.restartTimer();
+    }
+  }
+
+  private subscribeCountdown() {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
+    this.sub = this.countdown$.subscribe(value => {
+      this.countdownValue = value;
+      if (value === 0) {
+        this.timeUp.emit();
+      }
+    });
+  }
 
   pause() {
     this.isRunning$.next(false);
@@ -76,6 +101,15 @@ print(x + y)\\c`;
   resetTimer(): void {
     this.pause();
     this.remainingTime = this.availableTime;
+    this.countdownValue = this.availableTime;
+    this.restartTimer();
+  }
+
+  private restartTimer() {
+    // Reset running state and resubscribe to create a fresh countdown sequence
+    this.isRunning$.next(false);
+    this.reset$.next();
+    this.subscribeCountdown();
     this.isRunning$.next(true);
   }
 

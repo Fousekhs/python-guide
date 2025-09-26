@@ -82,10 +82,10 @@
                 <app-theory-unit [title]="currentLesson.title" [content]="currentLesson.content" (nextContent)="goToNextLesson()"></app-theory-unit>
             }
             @case ('truefalse') {
-                <app-mcq-unit [title]="currentLesson.title" [availableTime]="currentLesson.timeLimitSeconds ?? 10" [isRetry]="retry" [userId]="userId" [sessionId]="sessionId" [sectionId]="sectionId" [subjectId]="subjectId" [questionId]="currentLesson.id ?? ''" [question]="currentLesson.question" [options]="trueFalseOptions" [correctAnswer]="getTrueFalseCorrectAnswer(currentLesson.correctAnswer)" (questionAnswered)="goToNextLesson()" (timeUp)="timeUp()"></app-mcq-unit>
+                <app-mcq-unit [title]="currentLesson.title" [availableTime]="currentLesson.timeLimitSeconds ?? 30" [isRetry]="retry" [userId]="userId" [sessionId]="sessionId" [sectionId]="sectionId" [subjectId]="subjectId" [questionId]="currentLesson.id ?? ''" [question]="currentLesson.question" [options]="trueFalseOptions" [correctAnswer]="getTrueFalseCorrectAnswer(currentLesson.correctAnswer)" (questionAnswered)="goToNextLesson()" (timeUp)="timeUp()"></app-mcq-unit>
             }
             @case ('mcq') {
-                <app-mcq-unit [title]="currentLesson.title" [availableTime]="currentLesson.timeLimitSeconds ?? 10" [isRetry]="retry" [userId]="userId" [sessionId]="sessionId" [sectionId]="sectionId" [subjectId]="subjectId" [questionId]="currentLesson.id ?? ''" [question]="currentLesson.question" [options]="currentLesson.options" [correctAnswer]="currentLesson.correctAnswer" (questionAnswered)="goToNextLesson()" (timeUp)="timeUp()"></app-mcq-unit>
+                <app-mcq-unit [title]="currentLesson.title" [availableTime]="currentLesson.timeLimitSeconds ?? 30" [isRetry]="retry" [userId]="userId" [sessionId]="sessionId" [sectionId]="sectionId" [subjectId]="subjectId" [questionId]="currentLesson.id ?? ''" [question]="currentLesson.question" [options]="currentLesson.options" [correctAnswer]="currentLesson.correctAnswer" (questionAnswered)="goToNextLesson()" (timeUp)="timeUp()"></app-mcq-unit>
             }
             @default {
                 <p class="error">
