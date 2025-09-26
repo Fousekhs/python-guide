@@ -1,0 +1,1 @@
+import{$ as a}from"./chunk-PT7SL42D.js";var o=class t{data=null;set(e){this.data=e}get(){return this.data}clear(){this.data=null}static \u0275fac=function(r){return new(r||t)};static \u0275prov=a({token:t,factory:t.\u0275fac,providedIn:"root"})};export{o as a};
