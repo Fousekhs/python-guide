@@ -1,7 +1,5 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CodeViewerComponent } from '../code-viewer/code-viewer.component';
-import { CodeParserPipe } from '../../pipes/CodeParserPipe.pipe';
 import { BehaviorSubject, interval, NEVER } from 'rxjs';
 import { switchMap, scan, startWith, takeWhile, shareReplay, map } from 'rxjs/operators';
 import { AttemptService, Attempt } from '../../services/attempt.service';
@@ -9,11 +7,11 @@ import { AttemptService, Attempt } from '../../services/attempt.service';
 @Component({
   standalone: true,
   selector: 'app-mcq-unit',
-  imports: [CommonModule, CodeViewerComponent, CodeParserPipe],
+  imports: [CommonModule],
   templateUrl: './mcq-unit.component.html',
   styleUrl: './mcq-unit.component.css'
 })
-export class McqUnitComponent {
+export class McqUnitComponent implements OnInit, OnDestroy {
   @Input() title: string = 'Multiple Choice Question';
   @Input() question: string = `What is the output of the following Python code?
   \\cx = "2"
@@ -36,14 +34,22 @@ print(x + y)\\c`;
 
   constructor(private attemptService: AttemptService) {}
 
+  private sub: any;
+
   ngOnInit(): void {
     this.remainingTime = this.availableTime;
-    this.countdown$.subscribe(value => {
+    this.sub = this.countdown$.subscribe(value => {
       this.countdownValue = value;
       if (value === 0) {
         this.timeUp.emit();
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 
   private isRunning$ = new BehaviorSubject<boolean>(true); // start running by default

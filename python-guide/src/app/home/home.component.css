@@ -4,6 +4,12 @@
     gap: 1rem;    
 }
 
+.username {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--electric-blue);
+}
+
 .logo {
     width: 15rem;
     height: 15rem;
@@ -65,7 +71,6 @@ header {
 }
 
 .login-label {
-  /* hide it initially */
   opacity: 0;
   visibility: hidden;
   transform: translateX(4px);
@@ -95,3 +100,41 @@ header {
   font-weight: bold;
   font-size: .8rem;
 }
+
+/* Practice buttons */
+.practice-buttons { margin: 1.5rem 0 2rem; display: flex; justify-content: center; }
+.buttons-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+.practice-btn {
+  position: relative;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  background-color: var(--dark-blue);
+  color: var(--white);
+  border-bottom: 2px solid var(--electric-blue);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.practice-btn:hover:not(:disabled) { 
+  background-color: var(--electric-blue);
+  color: var(--dark-blue);
+}
+.practice-btn:disabled { opacity: .45; cursor: not-allowed; border-color: #555; }
+.practice-btn .pb-tooltip {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  margin-top: .35rem;
+  background: #1f2a40;
+  color: var(--white);
+  padding: .5rem .6rem;
+  border-radius: 4px;
+  font-size: .65rem;
+  width: 180px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity .25s, transform .25s;
+  z-index: 5;
+}
+.practice-btn:hover .pb-tooltip { opacity: 1; transform: translateY(0); }

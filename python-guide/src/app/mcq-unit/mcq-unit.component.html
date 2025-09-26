@@ -1,19 +1,8 @@
 <div class="mcq-container">
   <h3 class="mcq-title">{{ title }}</h3>
-  @for (seg of question | codeParser; track seg) {
-    <div>
-      @if (seg.type === 'text') {
-        <div class="question-text">
-          {{ seg.value }}
-        </div>
-      }
-      @if (seg.type === 'code') {
-        <app-code-viewer
-          [code]="seg.value">
-        </app-code-viewer>
-      }
-    </div>
-  }
+  <div>
+    {{ question }}
+  </div>
 
   <ul class="options-list">
     @for (option of options; track option) {

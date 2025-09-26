@@ -26,7 +26,11 @@
     "@codemirror/theme-one-dark": "^6.1.2",
     "@codemirror/view": "^6.36.8",
     "codemirror": "^6.0.1",
+    "echarts": "^6.0.0",
     "firebase": "^11.9.1",
+    "ngx-echarts": "^20.0.2",
+    "ngx-quill": "^28.0.1",
+    "quill": "^2.0.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

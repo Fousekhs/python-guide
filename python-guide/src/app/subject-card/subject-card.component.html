@@ -1,11 +1,31 @@
 <div class="subject-card" [class.disabled]="!available">
-  <button class="play-button" (click)="onPlay()">
+  <button class="play-button" (click)="onPlay()" [disabled]="!available">
     <svg-play></svg-play>
   </button>
   <div class="text">
-    <h5 class="title">{{ title }}</h5>
+    <h5 class="title tooltip-trigger">
+      {{ title }}
+      <span class="tooltip-content">
+        <ng-container *ngIf="available; else lockedTooltip">
+          <strong>Unlocked!</strong><br>
+          You can improve your score anytime.
+          <ng-container *ngIf="potentialMaxPoints > 0"> Max possible: {{ potentialMaxPoints }} pts.</ng-container>
+        </ng-container>
+        <ng-template #lockedTooltip>
+          <strong>Locked Subject</strong><br>
+          Requires at least {{ requiredPoints }} total points to unlock.<br>
+          You currently have {{ userTotalPoints }} pts ({{ unlockProgressPercent }}%).
+        </ng-template>
+      </span>
+    </h5>
     <p class="subtitle" [ngClass]="subtitleClass">
       {{ subtitle }}
     </p>
+    <div *ngIf="!available" class="unlock-bar-wrapper">
+      <div class="unlock-bar-fill" [style.width.%]="unlockProgressPercent"></div>
+    </div>
+    <div *ngIf="available && potentialMaxPoints > 0 && earnedPoints < potentialMaxPoints" class="unlock-bar-wrapper" style="background:rgba(255,255,255,0.05)">
+      <div class="unlock-bar-fill" [style.width.%]="subjectCompletionPercent"></div>
+    </div>
   </div>
 </div>

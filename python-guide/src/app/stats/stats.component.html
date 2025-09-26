@@ -1,1 +1,97 @@
-<p>stats works!</p>
+<div class="stats-page">
+	@if (!loading()) {
+		@if (!errorMessage()) {
+		<div style="display:flex; justify-content:flex-end; margin-bottom: .75rem;">
+			<button (click)="goHome()" class="back-btn">Home</button>
+		</div>
+        <div class="grid">
+			<!-- Heatmap (spans two columns) -->
+			<div class="panel span-2-cols">
+				<h3>Activity Heatmap</h3>
+				@if (heatmapOption(); as heatOpt) {
+					<echarts class="heatmap" [options]="heatOpt"></echarts>
+				} @else { <p class="empty">No activity yet.</p> }
+			</div>
+
+			<!-- Points Progression -->
+			<div class="panel">
+				<h3>Total Points Progression</h3>
+				@if (pointsLineOption(); as plo) { <echarts class="chart" [options]="plo"></echarts> }
+			</div>
+
+			<!-- Passed Subjects Summary -->
+			<div class="panel">
+				<h3>Passed Subjects</h3>
+				@if (data(); as d) {
+					<div class="big-number">{{ d.passedSubjects.passed }} / {{ d.passedSubjects.total }}</div>
+				}
+				<p class="small-note">A subject is counted as passed if any session granted points.</p>
+			</div>
+
+			<!-- Avg Best Efficiency Gauge -->
+			<div class="panel">
+				<h3>Avg Best Efficiency</h3>
+				@if (avgBestEfficiencyGauge(); as eGauge) { <echarts class="gauge" [options]="eGauge"></echarts> } @else { <p class="empty">No data.</p> }
+			</div>
+
+			<!-- Avg Best Mastery Gauge -->
+			<div class="panel">
+				<h3>Avg Best Mastery</h3>
+				@if (avgBestMasteryGauge(); as mGauge) { <echarts class="gauge" [options]="mGauge"></echarts> } @else { <p class="empty">No data.</p> }
+			</div>
+
+			<!-- Random Practice History -->
+			<div class="panel span-2-cols">
+				<h3>Random Practice Sessions</h3>
+				@if (data(); as d) { <p>Average Efficiency: {{ d.randomPractice.average | number:'1.0-1' }}%</p> }
+				@if (randomPracticeLine(); as rpl) { <echarts class="chart" [options]="rpl"></echarts> }
+				@if (data(); as d) {
+					<details class="history">
+						<summary>Show History</summary>
+						<table class="compact">
+							<thead><tr><th>Session</th><th>Date</th><th>Eff%</th><th>Mastery%</th><th>Points</th></tr></thead>
+							<tbody>
+								@for (h of d.randomPractice.history; track h.sessionId) {
+								<tr>
+									<td>{{ h.sessionId.substring(0,6) }}</td>
+									<td>{{ h.date }}</td>
+									<td>{{ h.efficiency || 0 | number:'1.0-1' }}</td>
+									<td>{{ h.mastery || 0 | number:'1.0-1' }}</td>
+									<td>{{ h.points || 0 }}</td>
+								</tr>
+								}
+							</tbody>
+						</table>
+					</details>
+				}
+			</div>
+
+			<!-- Worst Practice History -->
+			<div class="panel span-2-cols">
+				<h3>Worst Practice Sessions</h3>
+				@if (data(); as d) { <p>Average Efficiency: {{ d.worstPractice.average | number:'1.0-1' }}%</p> }
+				@if (worstPracticeLine(); as wpl) { <echarts class="chart" [options]="wpl"></echarts> }
+				@if (data(); as d) {
+					<details class="history">
+						<summary>Show History</summary>
+						<table class="compact">
+							<thead><tr><th>Session</th><th>Date</th><th>Eff%</th><th>Mastery%</th><th>Points</th></tr></thead>
+							<tbody>
+								@for (h of d.worstPractice.history; track h.sessionId) {
+								<tr>
+									<td>{{ h.sessionId.substring(0,6) }}</td>
+									<td>{{ h.date }}</td>
+									<td>{{ h.efficiency || 0 | number:'1.0-1' }}</td>
+									<td>{{ h.mastery || 0 | number:'1.0-1' }}</td>
+									<td>{{ h.points || 0 }}</td>
+								</tr>
+								}
+							</tbody>
+						</table>
+					</details>
+				}
+			</div>
+		</div>
+		} @else { <div class="error">{{ errorMessage() }}</div> }
+	} @else { <div class="loading">Loading statistics...</div> }
+</div>

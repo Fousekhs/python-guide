@@ -1,0 +1,182 @@
+/* =============================
+	 Stats Page Layout & Structure
+	 ============================= */
+
+.stats-page {
+	padding: 1rem;
+}
+
+/* Top selectors (section / subject) */
+.selectors {
+	display: flex;
+	gap: 1rem;
+	margin-bottom: 1rem;
+	flex-wrap: wrap;
+}
+
+.selectors select {
+	background: #12232c;
+	color: #fff;
+	border: 1px solid #244654;
+	padding: 4px 8px;
+	border-radius: 4px;
+}
+
+/* Responsive grid for panels */
+.grid {
+	display: grid;
+	grid-template-columns: 1fr; /* mobile default */
+	gap: 16px;
+	align-items: start;
+}
+
+@media (min-width: 900px) {
+	.grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* Panel container */
+.panel {
+	background: var(--background-blue);
+	border-radius: 12px;
+	padding: 12px 16px;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+	display: flex;
+	flex-direction: column;
+}
+
+.panel h3 {
+	margin: 0 0 8px;
+	font-size: 0.95rem;
+	letter-spacing: 0.5px;
+	color: #a9c0cf;
+	font-weight: 600;
+}
+
+/* Grid span helpers */
+.span-2 { grid-column: span 2; }
+/* New helper for explicit two-column span in 2-col layout */
+.span-2-cols { grid-column: 1 / -1; }
+
+/* Charts & visual blocks */
+.chart,
+.gauge,
+.heatmap {
+	width: 100%;
+	height: 220px;
+}
+
+.chart.tall { height: 300px; }
+
+/* Subject performance layout (simplified after separating gauges) */
+
+/* Highlight numbers */
+.big-number {
+	font-size: 2.2rem;
+	font-weight: 700;
+	color: var(--electric-blue);
+	text-align: center;
+}
+
+.small-note {
+	font-size: 0.7rem;
+	opacity: 0.7;
+	text-align: center;
+}
+
+/* =============================
+	 Tables & Scroll Behavior
+	 ============================= */
+
+.compact {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.7rem;
+	margin-top: 8px;
+}
+
+.compact th,
+.compact td {
+	padding: 4px 6px;
+	border-bottom: 1px solid #244654;
+	text-align: left;
+}
+
+.compact tr.dim { opacity: 0.35; }
+
+/* Scroll container adaptation */
+.compact.scrollable,
+.panel table.compact {
+	max-height: 600px;
+	overflow: auto;
+	display: block; /* enables max-height scroll */
+}
+
+/* Sticky header */
+.compact.scrollable thead,
+.panel table.compact thead {
+	position: sticky;
+	top: 0;
+	background: var(--background-blue);
+	z-index: 2;
+}
+
+/* Preserve column layout while table is block */
+.compact.scrollable tbody tr,
+.panel table.compact tbody tr,
+.compact.scrollable thead tr,
+.panel table.compact thead tr {
+	display: table;
+	width: 100%;
+	table-layout: fixed;
+}
+
+/* Scrollbar styling (WebKit) */
+.compact.scrollable::-webkit-scrollbar { width: 8px; }
+.compact.scrollable::-webkit-scrollbar-thumb {
+	background: #2d4b5a;
+	border-radius: 4px;
+}
+
+@supports (overflow: clip) {
+	.compact.scrollable { overflow: auto; }
+}
+
+/* =============================
+	 Utility / Meta Elements
+	 ============================= */
+
+.empty { font-size: 0.75rem; opacity: 0.7; }
+
+.history summary {
+	cursor: pointer;
+	margin: 6px 0;
+	font-weight: 600;
+	letter-spacing: 0.5px;
+}
+
+.loading,
+.error {
+	padding: 2rem;
+	text-align: center;
+}
+
+.error { color: #e07d7d; }
+
+/* Back/Home button */
+.back-btn {
+	background: var(--dark-blue);
+	color: var(--white);
+	border: 1px solid #244654;
+	padding: 6px 14px;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 0.75rem;
+	letter-spacing: 0.5px;
+	transition: background .2s, color .2s;
+}
+.back-btn:hover { background: var(--electric-blue); color: var(--dark-blue); }
+
+/* Larger screens: give charts a little more vertical room */
+@media (min-width: 1200px) {
+	.chart, .heatmap { height: 260px; }
+}

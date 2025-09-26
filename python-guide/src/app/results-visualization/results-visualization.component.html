@@ -1,0 +1,47 @@
+<div class="results-grid">
+  <div class="pass-fail" [class.passed]="passed" [class.failed]="!passed">
+    <span>{{ passed ? 'PASSED' : 'FAILED' }}</span>
+  </div>
+  <div class="gauge">
+    <echarts [options]="masteryOption" class="chart"></echarts>
+    <div class="gauge-label">Mastery {{ mastery | number:'1.0-1' }}%</div>
+    <div class="gauge-subtext">Pass ≥ 75%</div>
+  </div>
+  <div class="gauge">
+    <echarts [options]="efficiencyOption" class="chart"></echarts>
+    <div class="gauge-label">Efficiency {{ efficiency | number:'1.0-1' }}%</div>
+    <div class="gauge-subtext">Pass ≥ 60%</div>
+  </div>
+  <div class="points-card">
+    <div class="points-row">
+      <span>Previous points:</span>
+      <strong>{{ previousPoints }}</strong>
+    </div>
+    <div class="points-row">
+      <span>Change:</span>
+      <strong [ngClass]="{ up: pointsDelta >= 0, down: pointsDelta < 0 }">
+        {{ pointsDelta >= 0 ? '+' : ''}}{{ pointsDelta }}
+      </strong>
+    </div>
+    <div class="points-row total">
+      <span>New points:</span>
+      <strong>{{ newPoints }}</strong>
+    </div>
+    <div class="threshold-note" *ngIf="!passed">
+      Did not meet <strong>60% efficiency</strong> and <strong>75% mastery</strong> thresholds — 0 points awarded this run.
+    </div>
+  </div>
+  
+  <!-- Leaderboard Section -->
+  <div class="leaderboard-section">
+    <div *ngIf="!leaderboardReady" class="leaderboard-loading">
+      <p>Loading leaderboard...</p>
+    </div>
+    <app-leaderboard 
+      *ngIf="leaderboardReady"
+      [sectionId]="sectionId"
+      [subjectId]="subjectId"
+      [questionId]="questionId">
+    </app-leaderboard>
+  </div>
+</div>

@@ -74,7 +74,8 @@ export class ContentAdminPanelComponent implements OnInit {
     this.subjectForm = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
-      order: [0, Validators.required]
+      order: [0, Validators.required],
+      minPointsRequired: [0, [Validators.min(0)]]
     });
 
     this.contentForm = this.fb.group({
@@ -86,11 +87,7 @@ export class ContentAdminPanelComponent implements OnInit {
       timeLimitSeconds: [null],
       maxPoints: [null],
       order: [0, Validators.required],
-      codeSegment: this.fb.group({
-        code: [''],
-        language: ['python'],
-        explanation: ['']
-      })
+      // Removed theory-level minPointsRequired (subject-level only)
     });
   }
 
@@ -273,13 +270,6 @@ export class ContentAdminPanelComponent implements OnInit {
     if (content.type === 'theory') {
       const theory = content as TheoryContent;
       this.contentForm.patchValue({ content: theory.content });
-      if (theory.codeSegment) {
-        this.contentForm.get('codeSegment')?.patchValue({
-          code: theory.codeSegment.code || '',
-          language: theory.codeSegment.language || 'python',
-          explanation: theory.codeSegment.explanation || ''
-        });
-      }
     } else if (content.type === 'mcq') {
       const mcq = content as MultipleChoiceQuestion;
       // Populate options
@@ -330,10 +320,9 @@ export class ContentAdminPanelComponent implements OnInit {
       case 'theory':
         return {
           ...base,
-          title: formValue.title,
-          type: 'theory',
-          content: formValue.content,
-          ...(formValue.codeSegment?.code && { codeSegment: formValue.codeSegment })
+            title: formValue.title,
+            type: 'theory',
+            content: formValue.content
         } as TheoryContent;
       case 'mcq':
         return {

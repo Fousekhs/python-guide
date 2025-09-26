@@ -1,12 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import { CodeParserPipe } from '../../pipes/CodeParserPipe.pipe';
-import { CustomImagePipe } from '../../pipes/CustomImagePipe.pipe';
-import { CodeViewerComponent } from '../code-viewer/code-viewer.component';
-
 @Component({
   selector: 'app-theory-unit',
-  imports: [CodeParserPipe, CustomImagePipe, CodeViewerComponent],
+  imports: [],
   templateUrl: './theory-unit.component.html',
   styleUrl: './theory-unit.component.css'
 })

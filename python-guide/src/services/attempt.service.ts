@@ -14,8 +14,16 @@ export interface QuestioningSession {
   id: string;
   userId: string;
   sectionId: string;
+  /** Optional subject context (added for stats page); legacy sessions may lack this */
+  subjectId?: string;
   startedAt: object; // serverTimestamp()
   completedAt?: object | null; // serverTimestamp() or null
+  // Optional results summary
+  efficiency?: number;
+  mastery?: number;
+  pointsGained?: number;
+  /** Practice mode tagging: 'random' | 'worst' | 'normal' (implicit). Added later; legacy sessions have none */
+  mode?: 'random' | 'worst';
 }
 
 /**
@@ -52,13 +60,15 @@ export class AttemptService {
    * @param sectionId The ID of the section being attempted.
    * @returns Observable<string> The ID of the newly created session.
    */
-  createQuestioningSession(userId: string, sectionId: string): Observable<string> {
+  createQuestioningSession(userId: string, sectionId: string, subjectId?: string, mode?: 'random' | 'worst'): Observable<string> {
     const sessionsRef = ref(this.db, 'questioning-sessions');
     const newSessionRef = push(sessionsRef);
     const session: QuestioningSession = {
       id: newSessionRef.key!,
       userId,
       sectionId,
+      ...(subjectId ? { subjectId } : {}),
+      ...(mode ? { mode } : {}),
       startedAt: serverTimestamp(),
       completedAt: null
     };
@@ -75,6 +85,11 @@ export class AttemptService {
     return from(update(sessionRef, { completedAt: serverTimestamp() }));
   }
 
+  updateQuestioningSessionResults(sessionId: string, data: { efficiency: number; mastery: number; pointsGained: number }): Observable<void> {
+    const sessionRef = ref(this.db, `questioning-sessions/${sessionId}`);
+    return from(update(sessionRef, { ...data, updatedAt: serverTimestamp() }));
+  }
+
   /**
    * Retrieves a single questioning session by its ID.
    * @param sessionId The ID of the session.
@@ -83,6 +98,24 @@ export class AttemptService {
   getQuestioningSession(sessionId: string): Observable<QuestioningSession | null> {
     const sessionRef = ref(this.db, `questioning-sessions/${sessionId}`);
     return from(get(sessionRef)).pipe(map(snap => snap.exists() ? snap.val() as QuestioningSession : null));
+  }
+
+  /**
+   * Retrieves all questioning sessions for a user (for stats aggregation). Non-indexed large datasets
+   * may need a composite index if performance degrades.
+   */
+  getSessionsForUser(userId: string): Observable<QuestioningSession[]> {
+    const sessionsRef = ref(this.db, 'questioning-sessions');
+    const q = query(sessionsRef, orderByChild('userId'), equalTo(userId));
+    return from(get(q)).pipe(
+      map(snap => {
+        if (!snap.exists()) return [];
+        const out: QuestioningSession[] = [];
+        snap.forEach(child => { out.push(child.val() as QuestioningSession); });
+        // Sort by startedAt if numeric; else leave
+        return out;
+      })
+    );
   }
 
   // ===========================
@@ -144,10 +177,28 @@ export class AttemptService {
       })
     );
   }
-  
+
   getIncorrectAttemptsForSession(sessionId: string): Observable<Attempt[]> {
     return this.getAttemptsForSession(sessionId).pipe(
       map(attempts => attempts.filter(a => !a.isCorrect))
+    );
+  }
+
+  /**
+   * Returns a map keyed by questionId with { total, correct, incorrect } counts for a user.
+   */
+  getUserQuestionStats(userId: string): Observable<Record<string, { total: number; correct: number; incorrect: number }>> {
+    return this.getAttemptsForUser(userId).pipe(
+      map(attempts => {
+        const stats: Record<string, { total: number; correct: number; incorrect: number }> = {};
+        attempts.forEach(a => {
+          const id = a.questionId;
+          if (!stats[id]) stats[id] = { total: 0, correct: 0, incorrect: 0 };
+          stats[id].total++;
+          if (a.isCorrect) stats[id].correct++; else stats[id].incorrect++;
+        });
+        return stats;
+      })
     );
   }
 }

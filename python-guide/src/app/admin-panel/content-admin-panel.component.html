@@ -178,6 +178,15 @@
                         placeholder="0"
                         class="form-input">
                       </div>
+                      <div class="form-field">
+                        <label for="subjectMinPoints">Minimum Points Required</label>
+                        <input
+                          id="subjectMinPoints"
+                          type="number"
+                          formControlName="minPointsRequired"
+                          placeholder="0"
+                          class="form-input">
+                      </div>
                       <div class="form-actions">
                         <button type="submit" class="btn btn-primary" [disabled]="!subjectForm.valid">
                           Create Subject
@@ -203,6 +212,7 @@
                             <p>{{ subject.description }}</p>
                             <div class="subject-meta">
                               <span class="order">Order: {{ subject.order }}</span>
+                              <span class="order">Min Points: {{ subject.minPointsRequired || 0 }}</span>
                               <span class="contents-count">{{ subject.contents.length || 0 }} contents</span>
                             </div>
                           </div>
@@ -286,28 +296,6 @@
                                 rows="6"
                                 placeholder="Enter theory content"
                               class="form-textarea"></textarea>
-                            </div>
-                            <div formGroupName="codeSegment" class="code-segment">
-                              <h4>Optional Code Segment</h4>
-                              <div class="form-field">
-                                <label for="codeSnippet">Code</label>
-                                <textarea
-                                  id="codeSnippet"
-                                  formControlName="code"
-                                  rows="4"
-                                  placeholder="Enter code example"
-                                class="form-textarea"></textarea>
-                              </div>
-                              <input type="hidden" id="codeLanguage" formControlName="language" value="python"/>
-                              <div class="form-field">
-                                <label for="codeExplanation">Code Explanation</label>
-                                <textarea
-                                  id="codeExplanation"
-                                  formControlName="explanation"
-                                  rows="2"
-                                  placeholder="Explain the code"
-                                class="form-textarea"></textarea>
-                              </div>
                             </div>
                           </div>
                         }

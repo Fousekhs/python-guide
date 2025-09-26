@@ -25,7 +25,30 @@
             @if (!result) {
                 Please wait...
             } @else {
-                @if (retry) {
+                @if (isPractice) {
+                    <div class="practice-results">
+                        <h3>Practice Complete</h3>
+                        <p>You have finished this {{practiceMode}} practice set.</p>
+                        <div class="practice-gauge-container">
+                          <div class="practice-echart-wrapper">
+                            <echarts *ngIf="practiceGaugeOption" [options]="practiceGaugeOption" class="practice-chart"></echarts>
+                            <div class="practice-gauge-label">Practice accuracy {{ practicePercent | number:'1.0-0' }}%</div>
+                            @if (practicePercent <= 50) {
+                                <div class="practice-gauge-subtext">Keep Practicing!</div>
+                            } @else if (practicePercent > 50 && practicePercent < 75) {
+                                <div class="practice-gauge-subtext">Almost there!</div>
+                            } @else {
+                                <div class="practice-gauge-subtext">Excellent!</div>                                
+                            }    
+                        </div>
+                        </div>
+                        <p class="disclaimer">These practice answers do not award points, do not change subject best scores, and are not shown on the leaderboard. They only help improve your personal stats for future practice selection.</p>
+                        <div class="results-actions">
+                          <button class="result-button" (click)="startAnotherPractice()">New {{practiceMode}} practice</button>
+                          <button class="result-button" (click)="goHome()">Home</button>
+                        </div>
+                    </div>
+                } @else if (retry) {
                     <div>
                         You have completed the lesson!<br>
                         Lets try again those questions you got wrong.
@@ -35,7 +58,20 @@
                     </button>
                 } @else {
                     <div>
-                        Congratulations! You answered all questions correctly!
+                        <app-results-visualization
+                          [mastery]="mastery"
+                          [efficiency]="efficiency"
+                          [previousPoints]="previousPoints"
+                          [newPoints]="newPoints"
+                          [passed]="passedNow"
+                          [sectionId]="sectionId"
+                          [subjectId]="subjectId"
+                          [leaderboardReady]="leaderboardReady">
+                        </app-results-visualization>
+                        <div class="results-actions">
+                          <button class="result-button" (click)="retryLesson()">Retry</button>
+                          <button class="result-button" (click)="goHome()">Home</button>
+                        </div>
                     </div>
                 }
             }

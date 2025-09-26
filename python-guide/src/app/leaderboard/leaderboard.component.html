@@ -1,0 +1,62 @@
+<div class="leaderboard-container">
+  <div class="header">
+    <h2>{{ title }}</h2>
+    <div *ngIf="loading" class="loading">Loading rankings...</div>
+  </div>
+
+  <div *ngIf="!loading && leaderboard.length === 0" class="no-data">
+    <p>No rankings available yet. Be the first to earn points!</p>
+  </div>
+
+  <div *ngIf="!loading && leaderboard.length > 0" class="leaderboard-list">
+    <div 
+      *ngFor="let entry of leaderboard" 
+      class="leaderboard-entry"
+      [class.current-user]="entry.isCurrentUser"
+      [class.top-three]="entry.rank <= 3"
+    >
+      <div class="rank-section">
+        <div class="rank" [class]="getRankClass(entry.rank)">
+          {{ entry.rank }}
+        </div>
+      </div>
+
+      <div class="user-info">
+        <div class="display-name">
+          {{ entry.displayName }}
+          <span *ngIf="entry.isCurrentUser" class="you-badge">(You)</span>
+        </div>
+        <div *ngIf="entry.avgMastery !== undefined && entry.avgEfficiency !== undefined" class="stats">
+          <span class="stat">
+            <span class="stat-label">Mastery:</span> 
+            <span class="stat-value">{{ entry.avgMastery | number:'1.0-1' }}%</span>
+          </span>
+          <span class="stat">
+            <span class="stat-label">Efficiency:</span> 
+            <span class="stat-value">{{ entry.avgEfficiency | number:'1.0-1' }}%</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="points-section">
+        <div class="points">{{ entry.points }}</div>
+        <div class="points-label">points</div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading" class="footer-note">
+    <p *ngIf="questionId">
+      <small>Showing best scores for this question only.</small>
+    </p>
+    <p *ngIf="!questionId && subjectId">
+      <small>Showing total points earned in this subject.</small>
+    </p>
+    <p *ngIf="!questionId && !subjectId && sectionId">
+      <small>Showing total points earned in this section.</small>
+    </p>
+    <p *ngIf="!questionId && !subjectId && !sectionId">
+      <small>Showing total points earned across all content.</small>
+    </p>
+  </div>
+</div>

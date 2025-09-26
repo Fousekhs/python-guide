@@ -5,6 +5,7 @@
   border-radius: 8px;
   background-color: var(--darkest-blue);
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative;
 }
 
 .disabled {
@@ -46,9 +47,67 @@
 }
 
 .subtitle--green {
-  color: var(--success-green);
+  color: var(--electric-blue);
+  font-weight: 600;
 }
 
 .subtitle--red {
-  color: var(--failed-red);
+  color: #d8895a; /* softer locked color */
+  font-style: italic;
+}
+
+.subject-card.disabled .play-button {
+  cursor: not-allowed;
+  color: #666;
+}
+
+/* Unlock progress bar (only visible when locked) */
+.unlock-bar-wrapper {
+  margin-top: 0.35rem;
+  width: 140px;
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.unlock-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--electric-blue), #4db6ff);
+  transition: width 0.4s ease;
+}
+
+/* Tooltip */
+.tooltip-trigger {
+  position: relative;
+  cursor: help;
+}
+
+.tooltip-trigger:hover .tooltip-content {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.tooltip-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #1f2a40;
+  color: var(--white);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  width: 220px;
+  font-size: 0.65rem;
+  line-height: 1.2;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.tooltip-content strong {
+  color: var(--electric-blue);
 }

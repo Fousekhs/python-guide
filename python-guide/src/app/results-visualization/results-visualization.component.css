@@ -1,0 +1,104 @@
+.results-grid {
+	min-width:700px;
+	display:grid;
+	grid-template-columns:1fr 1fr;
+	gap:16px;
+	align-items:stretch;
+}
+
+.gauge {
+	background:var(--background-blue);
+	border-radius:12px;
+	padding:12px;
+}
+
+.chart {
+	width:100%;
+	height:260px;
+	display:block;
+}
+
+.gauge-label {
+	margin-top:6px;
+	text-align:center;
+	color:#a9c0cf;
+	font-weight:600;
+}
+
+.points-card {
+	grid-column:span 2;
+	background:var(--background-blue);
+	border-radius:12px;
+	padding:16px;
+}
+
+.points-row {
+	display:flex;
+	justify-content:space-between;
+	margin:6px 0;
+}
+
+.points-row.total {
+	border-top:1px solid var(--line-blue);
+	margin-top:10px;
+	padding-top:10px;
+}
+
+.up {
+	color:var(--success-green);
+}
+
+.down {
+	color:var(--failed-red);
+}
+
+
+.pass-fail {
+	grid-column: span 2;
+	text-align: center;
+	font-size: 28px;
+	font-weight: 800;
+	padding: 8px 0;
+}
+
+.pass-fail.passed { 
+	color: var(--success-green); 
+}
+
+.pass-fail.failed { 
+	color: var(--failed-red);
+}
+
+.threshold-note {
+	margin-top:12px;
+	font-size:13px;
+	line-height:1.4;
+	color:#e0b4b4;
+	background:#241a1a;
+	padding:8px 10px;
+	border:1px solid #613131;
+	border-radius:6px;
+}
+
+.gauge-subtext {
+	margin-top:2px;
+	text-align:center;
+	font-size:11px;
+	color:var(--text-blue);
+	letter-spacing:0.5px;
+	font-weight:500;
+}
+
+.leaderboard-section {
+	grid-column: span 2;
+	margin-top: 16px;
+}
+
+.leaderboard-loading {
+	background: var(--background-blue);
+	border-radius: 12px;
+	padding: 2rem;
+	text-align: center;
+	color: var(--text-blue);
+	font-style: italic;
+}

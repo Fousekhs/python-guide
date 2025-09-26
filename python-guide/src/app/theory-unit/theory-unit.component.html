@@ -1,19 +1,8 @@
 <div class="content-container">
   <h3 class="title">{{ title }}</h3>
-  @for (seg of content | codeParser; track seg) {
-    <div>
-      @if (seg.type === 'text') {
-        <div class="question-text" [innerHTML] = "seg.value"></div>
-      }
-      @if (seg.type === 'code') {
-        <app-code-viewer
-          [code]="seg.value">
-        </app-code-viewer>
-      }
-    </div>
-  }
-  @if (imgSrc != '' && imgSrc != null) {
-    <img [src]="imgSrc" alt="Theory Image" class="theory-image">
-  }
+  <div class="content">
+    {{ content }}
+  </div>
+
   <button class="next-btn" (click)="goToNext()">Next</button>
 </div>

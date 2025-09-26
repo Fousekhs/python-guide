@@ -1,3 +1,41 @@
+/* Practice mode layout */
+.finished-message > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.practice-gauge-container {
+  margin: 1rem 0 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.practice-echart-wrapper { width:220px; background: var(--background-blue); padding:18px 18px 10px; border-radius:14px; display:flex; flex-direction:column; align-items:center; }
+.practice-chart { width:200px; height:200px; }
+.practice-gauge-label { margin-top:6px; font-size:16px; font-weight:600; color:#a9c0cf; }
+.practice-gauge-subtext { margin-top:2px; font-size:10px; color:#6e8797; letter-spacing:0.3px; }
+
+.practice-summary {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.75rem;
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.practice-summary li { font-weight: 500; }
+
+.disclaimer {
+  max-width: 480px;
+  font-size: 0.75rem;
+  line-height: 1.2rem;
+  opacity: 0.85;
+  margin-bottom: 1rem;
+}
 /* Ensure the page container fills the viewport and uses flex layout */
 .page-container {
   display: flex;
@@ -125,4 +163,34 @@ footer {
   display: flex !important;
   align-items: center !important;
   justify-content: space-around !important;
+}
+
+.results-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.result-button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  background-color: var(--dark-blue);
+  color: var(--white);
+  border-bottom: 2px solid var(--electric-blue);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.result-button:hover {
+  background-color: var(--electric-blue);
+  color: var(--dark-blue);
+}
+
+.practice-results {
+  border-radius: 12px;
+  padding: 2rem;
+  background: var(--background-blue);
 }

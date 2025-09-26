@@ -33,7 +33,6 @@ interface BaseContent {
 export interface TheoryContent extends BaseContent {
   type: 'theory';
   content: string;
-  codeSegment?: CodeSegment;
 }
 
 export interface MultipleChoiceQuestion extends BaseContent {
@@ -83,6 +82,8 @@ export interface Subject {
   contents: SubjectContent[]; // stored as an object in RTDB; this is for typing convenience
   order: number;
   sectionId: string;
+  /** Minimum total points required to access this subject (defaults to 0 if absent) */
+  minPointsRequired?: number;
   createdAt?: object;
   updatedAt?: object;
 }
@@ -235,6 +236,8 @@ export class ContentService {
                 Object.keys(subjectData.contents).forEach(contentKey => {
                   const content = subjectData.contents[contentKey];
                   if (content.type) {
+                    // Backward compatibility: Some theory items may still have a legacy minPointsRequired field.
+                    // It is now ignored at the theory level (subject-level gating only).
                     contents.push({
                       id: contentKey,
                       ...content
